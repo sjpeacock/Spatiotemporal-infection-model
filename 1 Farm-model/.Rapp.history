@@ -1,0 +1,1059 @@
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=range(infection.pressure)*1000,  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=range(infection.pressure)*1000,  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+plot(FarmLocation+20, max.motiles[,1], "n", ylim=range(max.motiles), xlab="Farm distance from spawning river (km)", ylab="Max. motile lice per fish", bty="l", las=1)#
+for(m in 1:3) lines(FarmLocation+20, max.motiles[,c(1,5,10)[m]], lwd=2, lty=m)#
+mtext(side=3, adj=0, "(b)", line=1)#
+legend(40, 1.5, lwd=1, lty=1, col=colorRampPalette(c("forest green","gold", "red"))(M),  title="Treatment threshold", legend=MotThreshold, bg="white", ncol=2)
+plot(FarmLocation+20, max.motiles[,1], "n", ylim=range(max.motiles), xlab="Farm distance from spawning river (km)", ylab="Max. motile lice per \n juvenile salmon", bty="l", las=1)
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=range(infection.pressure)*1000,  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+plot(FarmLocation+20, max.motiles[,1], "n", ylim=range(max.motiles), xlab="Farm distance from spawning river (km)", ylab="Max. motile lice per \n juvenile salmon", bty="l", las=1)#
+for(m in 1:3) lines(FarmLocation+20, max.motiles[,c(1,5,10)[m]], lwd=2, lty=m)#
+mtext(side=3, adj=0, "(b)", line=1)
+MotThreshold
+legend(40, 1.5, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white")
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=range(infection.pressure)*1000,  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(40, 1.5, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white")
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=range(infection.pressure)*1000,  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(40, 1.5, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=range(infection.pressure)*1000,  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(40, 1.5, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(30, 1.7, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(30, 1.6, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(20, 1.6, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=range(infection.pressure)*1000,  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(25, 1.6, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(25, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(20, 2, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(20, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(20, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(19, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(18, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(17, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(17, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(15, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(15, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+plot(FarmLocation+20, max.motiles[,1], "n", ylim=range(max.motiles), xlab="Farm distance from spawning river (km)", ylab="Max. motile lice per \n juvenile salmon", bty="l", las=1)#
+for(m in 1:3) lines(FarmLocation+20, max.motiles[,c(1,5,10)[m]], lwd=2, lty=m)#
+mtext(side=3, adj=0, "(b)", line=1)
+quartz("Results", width=5.6, height=7.4, pointsize=20, family="Gill Sans")
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(15, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)#
+plot(FarmLocation+20, max.motiles[,1], "n", ylim=range(max.motiles), xlab="Farm distance from spawning river (km)", ylab="Max. motile lice per \n juvenile salmon", bty="l", las=1)#
+for(m in 1:3) lines(FarmLocation+20, max.motiles[,c(1,5,10)[m]], lwd=2, lty=m)#
+mtext(side=3, adj=0, "(b)", line=1)
+quartz("Results", width=5.6, height=7.4, pointsize=20, family="Gill Sans")#
+par(mfrow=c(2,1), mar=c(4,5,2,1), oma=c(0,0,0,0), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="Farm distance from spawning river (km)", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+legend(15, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)#
+plot(FarmLocation+20, max.motiles[,1], "n", ylim=range(max.motiles), xlab="Farm distance from spawning river (km)", ylab="Max. motile lice per \n juvenile salmon", bty="l", las=1, yaxt="n")#
+axis(side=2, at=c(0.0, 0.1, 0.2, 0.3, 0.4))#
+for(m in 1:3) lines(FarmLocation+20, max.motiles[,c(1,5,10)[m]], lwd=2, lty=m)#
+mtext(side=3, adj=0, "(b)", line=1)
+axis(side=2, at=c(0.0, 0.1, 0.2, 0.3, 0.4), las=1)
+mtext(side=1, "Farm distance from spawning river (km)", line=1)
+mtext(side=1, "Farm distance from spawning river (km)", line=1.2)
+mtext(side=1, "Farm distance from spawning river (km)", line=1.5)
+mtext(side=1, "Farm distance from spawning river (km)", line=2)
+par(mfrow=c(2,1), mar=c(4,5,2,2), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=1, "Farm distance from spawning river (km)", line=2)#
+mtext(side=3, adj=0, "(a)", line=1)#
+#
+#legend(15, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)#
+plot(FarmLocation+20, max.motiles[,1], "n", ylim=range(max.motiles), xlab="", ylab="Max. motile lice per \n juvenile salmon", bty="l", las=1, yaxt="n")#
+axis(side=2, at=c(0.0, 0.1, 0.2, 0.3, 0.4), las=1)#
+for(m in 1:3) lines(FarmLocation+20, max.motiles[,c(1,5,10)[m]], lwd=2, lty=m)#
+mtext(side=1, "Farm distance from spawning river (km)", line=2)#
+mtext(side=3, adj=0, "(b)", line=1)
+par(mfrow=c(2,1), mar=c(4,5,2,2), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=1, "Farm distance from spawning river (km)", line=2)#
+#mtext(side=3, adj=0, "(a)", line=1)#
+#
+#legend(15, 1.9, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)#
+plot(FarmLocation+20, max.motiles[,1], "n", ylim=range(max.motiles), xlab="", ylab="Max. motile lice per \n juvenile salmon", bty="l", las=1, yaxt="n")#
+axis(side=2, at=c(0.0, 0.1, 0.2, 0.3, 0.4), las=1)#
+for(m in 1:3) lines(FarmLocation+20, max.motiles[,c(1,5,10)[m]], lwd=2, lty=m)#
+mtext(side=1, "Farm distance from spawning river (km)", line=2)#
+#mtext(side=3, adj=0, "(b)", line=1)
+par(mfrow=c(2,1), mar=c(4,5,2,2), family="Gill Sans")#
+#
+plot(FarmLocation+20, infection.pressure[,1]*1000, "n", ylim=c(0,2),  ylab="Total infection pressure", xlab="", bty="l",las=1)#
+for(m in 1:3) lines(FarmLocation+20, infection.pressure[,c(1,5,10)[m]]*1000, lwd=2, lty=m)#
+#points(c(-3.71, 4, 53)+20, ip, pch=8)#
+mtext(side=1, "Farm distance from spawning river (km)", line=2)#
+mtext(side=3, adj=0, "(a)", line=1)#
+plot(FarmLocation+20, max.motiles[,1], "n", ylim=range(max.motiles), xlab="", ylab="Max. motile lice per \n juvenile salmon", bty="l", las=1, yaxt="n")#
+axis(side=2, at=c(0.0, 0.1, 0.2, 0.3, 0.4), las=1)#
+for(m in 1:3) lines(FarmLocation+20, max.motiles[,c(1,5,10)[m]], lwd=2, lty=m)#
+mtext(side=1, "Farm distance from spawning river (km)", line=2)#
+mtext(side=3, adj=0, "(b)", line=1)
+plot(1,1,"n", bty="n", xaxt="n", yaxt="n", xlab="", ylab="")
+legend("topleft", lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend("centre", lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(0,1, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(1,1, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(0.5,1, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(0.5,1.2, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+plot(1,1,"n", bty="n", xaxt="n", yaxt="n", xlab="", ylab="")#
+legend(0.5,1.2, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+legend(0.8,1.2, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+plot(1,1,"n", bty="n", xaxt="n", yaxt="n", xlab="", ylab="")#
+legend(0.8,1.2, lwd=2, lty=c(1:3),  title="Treatment threshold \n (avg. lice per farm salmon)", legend=MotThreshold[c(1,5,10)], bg="white", bty="n", cex=0.8)
+p.lice <-structure(c(0.814131466366775, 0.784847361472927, 0.842521084725031, 0.454476853291562, 0.428296096342196, 0.48161650460865, 0.959286066533643, 0.931346328148856, 0.979087251141504, 0.768730048444744, 0.732961857091869, 0.804977614957504, 3.76686083668893, 3.69866272621063,3.8384035508553, 0.0117805618660556, 0.0113020676105591, 0.0122817405420862, 906.357303101593, 849.945830970188, 966.345300236873, 0.589421789020028, 0.566100042788106, 0.614201925797076), .Dim = c(3L, 8L), .Dimnames = list(NULL,c("Csc", "Csh", "Psc", "Psh", "v", "k", "phi", "r")))
+p.lice
+load("~/Google Drive/Greens/Code/Simulations/FarmLocSimulations_2012Aug22.RData")
+#days migrating = 80 km/v#
+migration.time<-floor(80/p.lice[1,5])#
+#
+t.migrating<-seq(73, (73+migration.time), dt)#
+as.Date(t.migrating, origin=c("2006-01-01"))#
+x.migrating<-round(-20+(t.migrating-73)*p.lice[1,5], 1)#
+#
+ind.migrating.attached<-cbind(findInterval(x.migrating, x.sim0), findInterval(t.migrating, t.sim0))#
+ind.migrating<-cbind(findInterval(x.migrating, x), findInterval(t.migrating, T))#
+#
+x.migrating<-x.migrating+20#
+x.sim0<-x.sim0+20#
+x<-x+20#
+#----------#
+# Function#
+plot3D<-function(Z, zmax){#
+	z   <- Z$z#
+	nrz <- nrow(z)#
+	ncz <- ncol(z)#
+	zlim=c(0,zmax)#
+	Ncol<-10#
+#
+	couleurs  <- paste(tail(grey(seq(0, trunc(1.2 * Ncol), 1)/(1.2*Ncol)),Ncol), rep("80", 1.2*Ncol), sep="") #transparent greyscale#
+	fcol      <- couleurs[as.matrix(trunc(z/zlim[2]*(Ncol-1))+1)]#
+	dim(fcol) <- c(nrz,ncz)#
+	fcol      <- fcol[-nrz,-ncz]#
+	lcol<-1#
+	pmat1<-persp(Z,col=fcol,zlim=zlim,theta=135,phi=30,zlab="", xlab="", ylab="", ticktype="detailed", border=lcol, cex.axis=0.8)#
+	text(0.27, -0.43, srt=46, "Distance (km)")#
+	text(-0.3, -0.45, srt=-46, "Time (days)")#
+	return(pmat1)#
+	}
+quartz(width=4, height=7)#
+#
+par(mfrow=c(2,1), mar=c(2, 3, 1, 0.5), oma=rep(0,4), mai=c(0.4, 0.2, 0.2, 0.1))#
+thin<-15#
+f=1;m=M; s=1#
+Z1<-FreeCope[[f,m]]/scale.par#
+Z<-list(z=100*Z1[seq(1, length(x), thin), seq(1, length(T), thin)], x=x[seq(1, length(x), thin)], y=T[seq(1, length(T), thin)])#
+pmat1<-plot3D(Z, zmax=1)#
+text(-0.52, -0.03, srt=102, "Infectious copepodites")#
+lines(trans3d(x=x.migrating, y=t.migrating, z=100*Z1[ind.migrating], pmat=pmat1), col=2)#
+start.<-ind.migrating[1,]; dim(start.)<-c(1,2)#
+points(trans3d(x=x.migrating[1], y=t.migrating[1], z=Z1[start.], pmat=pmat1), col=2, pch=21, bg="white", cex=0.8)#
+end<-ind.migrating[length(x.migrating),]; dim(end)<-c(1,2)#
+points(trans3d(x=x.migrating[length(x.migrating)], y=t.migrating[length(x.migrating)], z=Z1[end], pmat=pmat1), col=2, pch=19, cex=0.8)#
+mtext(side=3, adj=0, "(a)")#
+thin<-10#
+Z1<-matrix(Attached[[f,m]][[3]][,s], nrow=length(x.sim0), ncol=length(t.sim0), byrow=TRUE)#
+Z<-list(z=Z1[seq(1, length(x.sim0), thin), seq(1, length(t.sim0), thin)], x=x.sim0[seq(1, length(x.sim0), thin)], y=t.sim0[seq(1, length(t.sim0), thin)])#
+pmat1<-plot3D(Z, zmax=0.5)#
+text(-0.52, -0.03, srt=102, "Attached motiles")#
+lines(trans3d(x=x.migrating, y=t.migrating, z=Z1[ind.migrating.attached], pmat=pmat1), col=2)#
+start.<-ind.migrating.attached[1,]; dim(start.)<-c(1,2)#
+points(trans3d(x=x.migrating[1], y=t.migrating[1], z=Z1[start.], pmat=pmat1), col=2, pch=21, bg="white", cex=0.8)#
+end<-ind.migrating.attached[length(x.migrating),]; dim(end)<-c(1,2)#
+points(trans3d(x=x.migrating[length(x.migrating)], y=t.migrating[length(x.migrating)], z=Z1[end], pmat=pmat1), col=2, pch=19, cex=0.8)#
+mtext(side=3, adj=0, "(b)")#
+#----------
+require(gplots)#
+load("~/Google Drive/Greens/FINALLY/Figures/farmModels_13June2012.RData")#
+quartz(width=4, height=7)#
+par(mfrow=c(3,1), mar=c(4,3,1,1), oma=c(2,2,1,1))#
+#
+plot(as.Date(T.all, origin="1970-01-01"), fset(p.fitted[[1]][,1], T.all, T.slice.all[1]), "l", xlab="", ylab="", bty="n", ylim=c(0,8), las=1, cex.axis=1.2)#
+polygon(x=c(T.all, rev(T.all)), y=c(CI.pred[[1]][,1], rev(CI.pred[[1]][,2])), border=NA, col="#00000030")#
+plotCI(as.Date(unique(Z$Date[Z$Farm=="SP"]), origin="1970-01-01"), Lice.summary[[1]][,1], ui=Lice.summary[[1]][,3], li=Lice.summary[[1]][,2], add=TRUE)#
+abline(v=T.slice.all[1], lty=2)#
+mtext(side=3, adj=0, "(a) Sargeaunt's Passage", line=0.5)#
+#
+plot(as.Date(T.all, origin="1970-01-01"), fset(p.fitted[[2]][,1], T.all, T.slice.all[2]), "l", xlab="", ylab="", bty="n", ylim=c(0,8), las=1, cex.axis=1.2)#
+polygon(x=c(T.all, rev(T.all)), y=c(CI.pred[[2]][,1], rev(CI.pred[[2]][,2])), border=NA, col="#00000030")#
+plotCI(as.Date(unique(Z$Date[Z$Farm=="HR"]), origin="1970-01-01"), Lice.summary[[2]][,1], ui=Lice.summary[[2]][,3], li=Lice.summary[[2]][,2], add=TRUE)#
+abline(v=T.slice.all[2], lty=2)#
+mtext(side=3, adj=0, "(b) Humphrey Rock", line=0.5)#
+#
+plot(as.Date(T.all, origin="1970-01-01"), fset(p.fitted[[3]][,1], T.all, T.slice.all[3]), "l", xlab="", ylab="", bty="n", ylim=c(0,8), las=1, cex.axis=1.2)#
+polygon(x=c(T.all, rev(T.all)), y=c(CI.pred[[3]][,1], rev(CI.pred[[3]][,2])), border=NA, col="#00000030")#
+points(as.Date(Z$Date[Z$Farm=="BG"], origin="1970-01-01"), Z$Lice[Z$Farm=="BG"]/20)#
+abline(v=T.slice.all[3], lty=2)#
+mtext(side=3, adj=0, "(c) Burdwood Group", line=0.5)#
+#
+mtext(side=2, outer=TRUE, "Average lice per farm salmon")#
+mtext(side=1, outer=TRUE, "Date (2005/2006)")
+require(numDeriv)#
+###################
+## Functions#
+###################
+#
+fset<-function(p, T, T.slice){#
+	r1<-p[1]#
+	r2<-p[2]#
+	f0<-p[3]#
+   forcing<-numeric(length(T))#
+   for(i in 1:length(T)){#
+   	if (T[i] < T.slice){forcing[i] = f0*exp(r1*as.numeric(T[i]-T.slice))}else{forcing[i] = f0*exp(r2*as.numeric(T[i]-T.slice))}#
+   	}#
+    forcing}#
+NLLHD<-function(p){#
+	pred<-fset(p, T[[f]], T.slice[[f]])#
+	k<-p[4]#
+	LL<-0#
+	for(i in 1:length(T[[f]])){#
+		LL<-LL+sum(dnbinom(dat[[f]][which(d[[f]]==T[[f]][i])], size=k, mu=pred[i], log=TRUE))#
+		}#
+	return(-LL)#
+	}#
+######################
+## Farm Calculations#
+######################
+T<-list();length(T)<-2#
+T.slice<-list();length(T.slice)<-2#
+d<-list();length(d)<-2#
+dat<-list(); length(dat)<-2#
+p.fitted<-matrix(NA, 2, 4)#
+#
+################
+## Humphrey#
+################
+t0<-as.Date("2006-01-01")#
+#
+f=1#
+HR<-read.csv("humphrey2006.csv")#
+T.slice[[1]]<-as.Date("2006-02-13")#
+#
+d[[1]]<-as.Date(HR[,1], origin=t0)#
+T[[1]]<-as.Date(as.numeric(levels(as.factor(HR[,1]))), origin=t0)#
+dat[[1]]<-HR[,2]#
+#
+p<-c(0.008266406, -0.024288479,2.870241347,1.280170787)#
+NLLHD(p)#
+fit<-optim(p, NLLHD)#
+p.fitted[1,]<-fit$par#
+#
+H<-hessian(NLLHD, fit$par)#
+sqrt(diag(solve(H)))#
+#
+p.fitted[1,]-1.96*sqrt(diag(solve(H)))#
+p.fitted[1,]+1.96*sqrt(diag(solve(H)))#
+############
+#Sargeaunts#
+###########
+f=2#
+SP<-read.csv("sargeaunt.csv")#
+T.slice[[2]]<-as.Date("2006-03-07")#in Krkosek et al, they chose second SLCE date I'm guessing by the figure...#
+#
+d[[2]]<-as.Date(SP[,1], origin="2006-03-05")#
+T[[2]]<-as.Date(as.numeric(levels(as.factor(SP[,1]))), origin="2006-03-05")#
+#
+dat[[2]]<-SP[,2]#
+p<-c(0.05909146,-0.04747440,7.43784289,1.55075845)#
+NLLHD(p)#
+#
+fit<-optim(p, NLLHD)#
+p.fitted[2,]<-fit$par#
+#
+H<-hessian(NLLHD, fit$par)#
+sqrt(diag(solve(H)))#
+#
+p.fitted[2,]-1.96*sqrt(diag(solve(H)))
+rm(list=ls())
+load("~/Google Drive/Greens/FINALLY/Figures/farmModels_13June2012.RData")
+ls()
+Z
+head(Z)
+setwd("~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model/Farm model")
+write.csv(Z, "farm_lice.csv")
+T.slice.all
+as.Date(T.slice.all, origin="1970-01-01")
+setwd("~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model/Farm model")#
+#
+lice_data<-read.csv("farm_lice.csv")#
+treat_data<-read.csv("treatment_dates.csv")
+treat_data<-read.csv("treatment_dates.csv")
+treatment.date<-c(as.Date("2006-03-07"), as.Date("2006-02-13"), as.Date("2006-01-13"))
+as.numeric(treatment.date)
+lice_data<-read.csv("farm_lice.csv")
+head(lice_data)
+lice_data$date<-as.Date(paste(lice_data$year, lice_data$month, lice_data$day, sep="-"))
+lice_data$date
+library(dclone)
+levels(lice_data$farm)
+j=1
+lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]
+treatment.date[j]
+?jags.parfit
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), )
+j
+head(lice_data)
+lice_data$lice/lice_data$num_fish
+lice_data$n.fish
+head(lice+data)
+head(lice_data)
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)
+dat
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+model<-function(){#
+	# Priors on parameters#
+	for(i in 1:2) r[i] ~ dnorm(0, 0.01) # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		if (sampling.date[i] < treatment.date){#
+   			f[i] = f0*exp(r[1]*(sampling.date-treatment.date))#
+   		}else{#
+   			f[i] = f0*exp(r[2]*(sampling.date-treatment.date))#
+   		}#
+   	}#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[i], k)#
+   	}#
+}
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+model<-function(){#
+	# Priors on parameters#
+	for(i in 1:2){ r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		if (sampling.date[i] < treatment.date){#
+   			f[i] = f0*exp(r[1]*(sampling.date-treatment.date))#
+   		}else{#
+   			f[i] = f0*exp(r[2]*(sampling.date-treatment.date))#
+   		}#
+   	}#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[i], k)#
+   	}#
+}
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+model<-function(){#
+	# Priors on parameters#
+	for(i in 1:2){ r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		if (sampling.date[i] < treatment.date){#
+   			f[i] <- f0*exp(r[1]*(sampling.date-treatment.date))#
+   		}else{#
+   			f[i] <- f0*exp(r[2]*(sampling.date-treatment.date))#
+   		}#
+   	}#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[i], k)#
+   	}
+}
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+model<-function(){#
+	# Priors on parameters#
+	for(i in 1:2){ r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		ifelse(sampling.date[i] < treatment.date, f[i] <- f0*exp(r[1]*(sampling.date-treatment.date)),vf[i] <- f0*exp(r[2]*(sampling.date-treatment.date)))#
+   	}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[i], k)#
+   	}#
+}
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+model<-function(){#
+	# Priors on parameters#
+	for(i in 1:2){ r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		ifelse(sampling.date[i]<treatment.date, f[i] <- f0*exp(r[1]*(sampling.date-treatment.date)),vf[i] <- f0*exp(r[2]*(sampling.date-treatment.date)))#
+   	}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[i], k)#
+   	}#
+}
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+model<-function(){#
+	# Priors on parameters#
+	for(i in 1:2){ r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		ifelse(sampling.date[i]<treatment.date, f[i]<-f0*exp(r[1]*(sampling.date-treatment.date)), f[i]<-f0*exp(r[2]*(sampling.date-treatment.date)))#
+   	}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[i], k)#
+   	}#
+}
+at<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		ifelse(sampling.date[i]<treatment.date, f[i]<-f0*exp(r[1]*(sampling.date-treatment.date)), f[i]<-f0*exp(r[2]*(sampling.date-treatment.date)))#
+   	}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[i], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){ r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+}
+cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+dat$treatment.date
+sampling.date
+dat$sampling.date
+dat$sampling.date<dat$treatment.date
+dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)
+dat$ind
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[i], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){ r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+}
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[i], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){ r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+}
+dat<-list(sampling.date=as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+sampling.date<-dat$sampling.date
+treatment.date<-dat$treatment.date
+r<-c(1.2, -1.2)
+ind
+ind<-dat$ind
+f<-rep(NA, length(sampling.date))
+f0<-10
+for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}
+plot(sampling.date, f)
+unique(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]))
+sampling.date.ind<-match(sampling.date, unique(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]])))
+sampling.date.ind
+dat<-list(sampling.date=unique(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]])), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), sampling.date)
+dat$sampling.date
+dat$sampling.date.ind
+dat<-list(sampling.date=unique(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]])), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), dat$sampling.date)
+dat$sampling.date.ind
+sampling.date<-dat$sampling.date
+sampling.date<-c(dat$sampling.date[1], dat$sampling.date[length(dat$sampling.date)])
+sampling.date
+sampling.date<-c(dat$sampling.date[1]:dat$sampling.date[length(dat$sampling.date)])
+sampling.date
+f<-numeric(length(sampling.date))
+for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}
+plot(sampling.date, f)
+treatment.date
+ind<-as.numeric(sampling.date<treatment.date)
+for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}
+plot(sampling.date, f)
+r
+r<-r/10
+for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}
+plot(sampling.date, f)
+dat<-list(sampling.date=unique(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]])), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish)#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), dat$sampling.date)
+cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+length(dat$ind)
+length(dat$sampling.date)
+dat$sampling.date
+dat$sampling.date.ind
+n.fish
+length(dat$n.fish)
+length(dat$sampling.date.ind)
+dat<-list(sampling.date=unique(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]])), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish[lice_data$farm==c("SP", "HR", "BG")[j]]])#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), dat$sampling.date)
+dat<-list(sampling.date=unique(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]])), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice, n.fish=lice_data$num_fish[lice_data$farm==c("SP", "HR", "BG")[j]])#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[lice_data$farm==c("SP", "HR", "BG")[j]]), dat$sampling.date)
+cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+length(sampling.date)
+length(dat$sampling.date)
+range(dat$sampling.date.ind)
+farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])
+farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])#
+	dat<-list(sampling.date=unique(as.numeric(lice_data$date[farm.ind])), treatment.date=as.numeric(treatment.date[j]), y=lice_data$lice[farm.ind], n.fish=lice_data$num_fish[farm.ind])#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)
+cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])
+dat<-list(#
+		sampling.date=unique(as.numeric(lice_data$date[farm.ind])), #
+		treatment.date=as.numeric(treatment.date[j]), #
+		y=lice_data$lice[farm.ind], #
+		n.fish=lice_data$num_fish[farm.ind])#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)
+dat
+length(dat$y)
+length(dat$sampling.date.ind)
+range(dat$sampling.date.ind)
+length(dat$sampling.date)
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[sampling.date.ind[i]], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+}
+setwd("~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model/Farm model")#
+#
+lice_data<-read.csv("farm_lice.csv")#
+lice_data$date<-as.Date(paste(lice_data$year, lice_data$month, lice_data$day, sep="-"))#
+#
+treatment.date<-c(as.Date("2006-03-07"), as.Date("2006-02-13"), as.Date("2006-01-13"))#
+#
+library(dclone)
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish*f[sampling.date.ind[i]], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+}
+j=1
+farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])#
+	dat<-list(#
+		sampling.date=unique(as.numeric(lice_data$date[farm.ind])), #
+		treatment.date=as.numeric(treatment.date[j]), #
+		y=lice_data$lice[farm.ind], #
+		n.fish=lice_data$num_fish[farm.ind])#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish[i]*f[sampling.date.ind[i]], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+}
+rm(model)
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish[i]*f[sampling.date.ind[i]], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){r[i] ~ dnorm(0, 0.01)} # growth rate#
+	f0 ~ dlnorm(0, 0.01) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.01) #overdispersion parameter in negative binomial#
+}
+cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+dat$y[11]
+y
+dat$y
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish[i]*f[sampling.date.ind[i]], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){r[i] ~ dnorm(0, 0.1)} # growth rate#
+	f0 ~ dlnorm(0, 0.1) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.1) #overdispersion parameter in negative binomial#
+}
+rm(dat)
+rm(model)
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(n.fish[i]*f[sampling.date.ind[i]], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){r[i] ~ dnorm(0, 0.1)} # growth rate#
+	f0 ~ dlnorm(0, 0.1) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.1) #overdispersion parameter in negative binomial#
+}
+farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])#
+	dat<-list(#
+		sampling.date=unique(as.numeric(lice_data$date[farm.ind])), #
+		treatment.date=as.numeric(treatment.date[j]), #
+		y=lice_data$lice[farm.ind], #
+		n.fish=lice_data$num_fish[farm.ind])#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+y[11]
+dat$y[11]
+dat$y
+dat$y[1:11]
+f<-numeric(length(sampling.date))
+sampling.date<-dat$sampling.date#
+treatment.date<-dat$treatment.date#
+ind<-dat$ind#
+r<-c(0.08, -0.08)#
+f0<-10
+f<-numeric(length(sampling.date))
+for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}
+f
+i=1
+sampling.date.ind<-dat$sampling.date.ind
+n.fish<-dat$n.fish
+dnbinom(n.fish[i]*f[sampling.date.ind[i]], k)
+k<-0.8
+dnbinom(n.fish[i]*f[sampling.date.ind[i]], k)
+unique(lice_data$num_fish[farm.ind])
+f.prob<-k/(k+n.fish*f)
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	f.prob<-k/(k+n.fish*f)#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(f.prob[sampling.date.ind[i]], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){r[i] ~ dnorm(0, 0.1)} # growth rate#
+	f0 ~ dlnorm(0, 0.1) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.1) #overdispersion parameter in negative binomial#
+}
+model<-function(){#
+	# Predicted values#
+	for(i in 1:length(sampling.date)){#
+   		f[i]<-f0*(ind[i]*exp(r[1]*(sampling.date[i]-treatment.date))+(1-ind[i])*exp(r[2]*(sampling.date[i]-treatment.date)))#
+   		}  	#
+   	# Likelihood calculation#
+   	f.prob <- k/(k+n.fish*f)#
+   	for(i in 1:length(y)){#
+   		y[i] ~ dnbinom(f.prob[sampling.date.ind[i]], k)#
+   	}#
+   	# Priors on parameters#
+	for(i in 1:2){r[i] ~ dnorm(0, 0.1)} # growth rate#
+	f0 ~ dlnorm(0, 0.1) # maximum louse abundance at treatment#
+	k ~ dlnorm(0, 0.1) #overdispersion parameter in negative binomial#
+}#
+#
+#j = farm number 1-3 where 1=SP, 2=HR, 3=BG
+farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])#
+	dat<-list(#
+		sampling.date=unique(as.numeric(lice_data$date[farm.ind])), #
+		treatment.date=as.numeric(treatment.date[j]), #
+		y=lice_data$lice[farm.ind], #
+		n.fish=unique(lice_data$num_fish[farm.ind]))#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=100, n.update=100, n.iter=500)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+summary(fit)
+farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])#
+	dat<-list(#
+		sampling.date=unique(as.numeric(lice_data$date[farm.ind])), #
+		treatment.date=as.numeric(treatment.date[j]), #
+		y=lice_data$lice[farm.ind], #
+		n.fish=unique(lice_data$num_fish[farm.ind]))#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)#
+	cl<-makeCluster(3, type="SOCK")#
+	t.start<-proc.time()#
+#
+	fit<-jags.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+summary(fit)
+cl<-makeCluster(4, type="SOCK")#
+	t.start<-proc.time()#
+#
+	dc.fit<-dc.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.clones=c(1:10) n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+cl<-makeCluster(4, type="SOCK")#
+	t.start<-proc.time()#
+#
+	dc.fit<-dc.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.clones=c(1:10), n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000)#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+?dc.fit
+names(dat)
+farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])#
+	dat<-list(#
+		sampling.date=unique(as.numeric(lice_data$date[farm.ind])), #
+		treatment.date=as.numeric(treatment.date[j]), #
+		y=lice_data$lice[farm.ind], #
+		n.fish=unique(lice_data$num_fish[farm.ind]))#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)
+cl<-makeCluster(4, type="SOCK")#
+	t.start<-proc.time()#
+#
+	dc.out<-dc.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.clones=c(1:10), n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000, unchanged=c("sampling.date", "treatment.date", "n.fish", "ind"))#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+summary(dc.out)
+plot(dctable(dc.out))
+plot(dctable(dc.out), type="var")
+allFits<-list()
+length(allFits)<-3
+allFits[[1]]<-dc.out
+for(j in 2:3){#
+	farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])#
+	dat<-list(#
+		sampling.date=unique(as.numeric(lice_data$date[farm.ind])), #
+		treatment.date=as.numeric(treatment.date[j]), #
+		y=lice_data$lice[farm.ind], #
+		n.fish=unique(lice_data$num_fish[farm.ind]))#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)#
+	cl<-makeCluster(4, type="SOCK")#
+	t.start<-proc.time()#
+#
+	dc.out<-dc.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.clones=c(1:10), n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000, unchanged=c("sampling.date", "treatment.date", "n.fish", "ind"))#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)#
+#
+	allFits[[j]]<-dc.out#
+	}
+allFits[[1]][[1]][1,]
+j
+farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])#
+	dat<-list(#
+		sampling.date=unique(as.numeric(lice_data$date[farm.ind])), #
+		treatment.date=as.numeric(treatment.date[j]), #
+		y=lice_data$lice[farm.ind], #
+		n.fish=unique(lice_data$num_fish[farm.ind]))#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)
+cl<-makeCluster(4, type="SOCK")#
+	t.start<-proc.time()#
+#
+	dc.out<-dc.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.clones=c(1:10), n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000, unchanged=c("sampling.date", "treatment.date", "n.fish", "ind"))#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)
+dat
+as.numeric(treatment.date[j])
+treatment.date
+treatment.date<-c(as.Date("2006-03-07"), as.Date("2006-02-13"), as.Date("2006-01-13"))
+for(j in 2:3){#
+	farm.ind<-which(lice_data$farm==c("SP", "HR", "BG")[j])#
+	dat<-list(#
+		sampling.date=unique(as.numeric(lice_data$date[farm.ind])), #
+		treatment.date=as.numeric(treatment.date[j]), #
+		y=lice_data$lice[farm.ind], #
+		n.fish=unique(lice_data$num_fish[farm.ind]))#
+	dat$ind<-as.numeric(dat$sampling.date<dat$treatment.date)#
+	dat$sampling.date.ind<-match(as.numeric(lice_data$date[farm.ind]), dat$sampling.date)#
+	cl<-makeCluster(4, type="SOCK")#
+	t.start<-proc.time()#
+#
+	dc.out<-dc.parfit(cl, data=dat, params=c("r", "f0", "k"), model=model, n.clones=c(1:10), n.chains=3, n.adapt=1000, n.update=1000, n.iter=5000, unchanged=c("sampling.date", "treatment.date", "n.fish", "ind"))#
+	all.time<-(proc.time()-t.start)[3]/60#
+	cat("Process time (minutes) = ", all.time)#
+	stopCluster(cl)#
+#
+	allFits[[j]]<-dc.out#
+	}
+for(i in 1:3) summary(allFits[[i]])
+for(i in 1:3) print(summary(allFits[[i]]))
+min(lice_data$date)
+x<-c((min(lice_data$date)-7):(max(lice_data$date)+7))
+x
+x<-seq((min(lice_data$date)-7), (max(lice_data$date)+7), 0.5)
+x
+x<-seq(as.numeric(min(lice_data$date)-7), as.numeric(max(lice_data$date)+7), 0.5)
+x
+plot(allFits[[3]])
+plot(allFits[[2]])
+plot(dctable(allFits[[2]]))
+plot(dctable(allFits[[2]]), type="var")
+j<-3
+plot(dctable(allFits[[j]]), type="var")
+save.image("farm_fits_20160208.RData")
+for(i in 1:3) allSum[[i]]<-summary(allFits[[i]])[[1]]
+allSum<-list();length(allSum)<-3#
+for(i in 1:3) allSum[[i]]<-summary(allFits[[i]])[[1]]
+allSum

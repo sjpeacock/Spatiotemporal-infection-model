@@ -1,0 +1,611 @@
+rm(list=ls())#
+setwd("~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model")#
+library(gplots)#
+##################################################################################################
+## Set up parameters for treatment scenarios#
+##################################################################################################
+#
+source('params.R')#
+p<-p.lice[1,]#
+source("Simulations/sim-grid.R")#
+source("Simulations/sim-functions.R")#
+source("Fitting/sim-model.R")#
+#
+# time zero is September 1, 2005 for our purposes#
+r1<-c(p.farm[[1]][1,1], p.farm[[2]][1,1], p.farm[[3]][1,1])#
+r2<-c(p.farm[[1]][2,1], p.farm[[2]][2,1], p.farm[[3]][2,1])#
+#
+#-----------------------------------------------#
+# Scenarios are:#
+fT<-list(); length(fT)<-4#
+tT<-list(); length(tT)<-4#
+#
+# 1) true treatment dates and abundances#
+fT[[1]]<-c(p.farm[[1]][3,1], p.farm[[2]][3,1], p.farm[[3]][3,1])#
+tT[[1]]<-c(as.numeric(as.Date("2006-03-07")), as.numeric(as.Date("2006-02-13")), as.numeric(as.Date("2006-01-13")))-as.numeric(as.Date("2005-09-01"))#
+#
+# 2) treated independently when threshold crossed#
+#
+#What was the predicted abundance on Sept 1?  This is where we start simulations#
+f0<-fT[[1]]*exp(-r1*tT[[1]])#
+fT[[2]]<-c(3,3,3)#
+tT[[2]]<-1/r1*log(fT[[2]]/f0)#
+#
+# 3) all treated when the first farm crossed threhsold (information sharing)  #
+tT[[3]]<-rep(min(tT[[2]]), 3)#
+fT[[3]]<-f0*exp(r1*tT[[3]])#
+#
+# 4) all treated Feb. 1#
+tT[[4]]<-rep((as.numeric(as.Date("2006-02-01"))-as.numeric(as.Date("2005-09-01"))), 3)#
+fT[[4]]<-f0*exp(r1*tT[[4]])#
+#
+#-----------------------------------------------#
+# Plot louse abundances under the four scenarios#
+#
+times<-c(0:303)#
+predicted.f<-list(); length(predicted.f)<-4#
+for(i in 1:4){#
+	predicted.f[[i]]<-matrix(NA, nrow=length(times), ncol=3)#
+	for(k in 1:3){#
+		for(j in 1:length(times)){#
+		predicted.f[[i]][j,k]<-fset(tT[[i]][k], fT[[i]][k], r1[k], r2[k], times[j])#
+		}#
+	}#
+}#
+#
+quartz(width=5.3, height=4, pointsize=10)#
+par(mfrow=c(2,2), mar=c(3,3,2,1), oma=c(0,1,0,0))#
+topText<-c("a) Scenario A", "b) Scenario B", "c) Scenario C", "d) Scenario D")#
+for(i in 1:4){#
+	plot(as.Date(times, origin="2005-09-01"), predicted.f[[i]][,1], "l",col=1, ylim=c(0, 8), bty="l", las=1, xlab="", ylab="")#max(predicted.f[[i]])#
+	polygon(x=c(as.Date("2006-04-01"), as.Date("2006-04-01"), as.Date("2006-06-30"), as.Date("2006-06-30")), y=c(-1, 10, 10, -1), border=NA, col="#00000020")#
+	lines(as.Date(times, origin="2005-09-01"), predicted.f[[i]][,2], lty=2)#
+	lines(as.Date(times, origin="2005-09-01"), predicted.f[[i]][,3], lty=3)#
+	#abline(v=as.Date(tT[[i]], origin="2005-09-01"), lty=c(1:3))#
+	abline(h=3, col=3)#, col=grey(0.8), lwd=2)#
+	mtext(side=3, adj=0, line=0.5, topText[i])#
+	if(i==2) legend("topleft", lty=c(1,2,3), c("Sargeaunts", "Humphrey", "Burdwood"), bg="white", bty="n")#legend(as.Date("2005-09-01"), 13, lwd=c(1,1,1,1,15), col=c(rep(1,3), 2,grey(0.8)), lty=c(1,2,3,1,1), c("Sargeaunts", "Humphrey", "Burdwood", "Treatment threshold", "Juvenile salmon migration"), bg="white", ncol=3, xpd=NA, bty="n")#
+}#
+mtext(side=2, outer=TRUE, expression(paste("Average number of motile ", italic(L), ". ",  italic(salmonis), " per farmed salmon")), line=-0.5)#
+##################################################################################################
+## Create cope distributions for all scenarios#
+##################################################################################################
+source('~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model/Simulations/sim-larvae.R')#
+#
+migDate<-function(x, Xstart=-20, Tstart=195, v=p.lice[1,5], numeric=FALSE){#
+	y<-Tstart+(x-Xstart)/v#
+	if(numeric==FALSE) return(as.Date(y, origin="2006-01-01")) else return(y)#
+}#
+#
+#Average dates of emergence (2007-2012, and 2010)#
+e1<-98#
+e2<-87#
+#
+# copedistributions saved as list of length 4 (4 scenarios) called farmL.all#
+source('~/Desktop/filledContour.R')#
+pal<-colorRampPalette(c("white", 1, 1))#
+quartz(width=6.3, height=6, pointsize=12)#
+layout(matrix(c(1,3,1,3,1,3,2,4,2,4,2,4,5,5), 2, 7))#
+par(mar=c(3,3,2,1), oma=c(2,2,1,0))#
+for(i in 1:4){#
+	filledContour(farmL.all[[i]], x=x, y=as.Date(T, origin="2005-09-01"), zlim=c(0,0.05), color.palette=pal, xlab="", ylab="")#
+	contour(farmL.all[[i]], x=x, y=as.Date(T, origin="2005-09-01"), add=TRUE)#
+	mtext(side=3, line=0.05, paste("Scenario ", LETTERS[i]))#
+	arrows(x0=-40, y0=as.Date(paste("2006-", e1, sep=""), format="%Y-%j"), x1=60, y1=migDate(60, Xstart=-40, Tstart=e1), col=4, length=0.08, xpd=NA)#
+		points(-40, as.Date(paste("2006-", e1, sep=""), format="%Y-%j"), pch=21, col=4, bg="white")#
+	arrows(x0=-40, y0=as.Date(paste("2006-", e2, sep=""), format="%Y-%j"), x1=60, y1=migDate(60, Xstart=-40, Tstart=e2), col=2, length=0.08, xpd=NA)#
+	points(-40, as.Date(paste("2006-", e2, sep=""), format="%Y-%j"), pch=21, col=2, bg="white")#
+	if(i>=3) abline(h=as.Date(tT[[i]][1], origin="2005-09-01"), lty=2)#
+	abline(v=c(0,3.5,53), lty=c(1:3), lwd=1.2)	#
+	}#
+mtext(side=1, outer=TRUE, "Distance along migration (km)")#
+mtext(side=2, outer=TRUE, "Date")#
+#
+plot.scale.bar(zlim=c(0, 0.05), color.palette=pal)#
+mtext(side=4, "Larval density", line=3.5)
+source('Fitting/sim-model.R')#
+#
+set.seed(98375)#
+#
+G<-read.csv("Simulations/Glendale.csv")#
+D1<-sample(G$day[G$year!=2010], size=1000, replace=TRUE, prob=G$fry[G$year!=2010]/sum(G$fry[G$year!=2010])) #
+D2<-sample(G$day[G$year==2010], size=1000, replace=TRUE, prob=G$fry[G$year==2010]/sum(G$fry[G$year==2010])) #
+#
+quartz(width=3.2, height=2.5, pointsize=10)#
+hist(D1, col="#0000FF80", border="white", main="", xaxt="n", las=1, xlab="Date of emergence")#
+axis(side=1, at=seq(70, 120, 10), labels= strftime(as.Date(seq(70, 120, 10), origin="2006-01-01"), format="%b-%d"))#
+hist(D2, col="#FF000080", border="white", add=TRUE)#
+#
+Tstart.all<-list(D1, D2)
+Metrics<-matrix(NA); length(Metrics)<-c(2*1000*4*3); dim(Metrics)<-c(2,1000, 4, 3)
+s=1
+i=1
+L<-farmL.all[[s]]#
+	L<-as.matrix(L)#
+	dimnames(L)[[2]]<-NULL#
+	L<-rbind(rep(0, length(T)), L) #add row of zeros for imputing
+x1<-seq(-40, 60, dx) #All start at Glendale#
+		Xind<-match(x1, x)
+j=1
+T1<-migDate(x1, Xstart=-40, Tstart=Tstart.all[[j]][i], numeric=TRUE)#
+			Tind<-findInterval(round(T1, 1)+122, round(T, 1))#
+			Metrics[j,i,s,1]<-p.lice[1,'phi']*sum(farmL.all[[s]][cbind(Xind, Tind)])*dx
+Lice_pred<-simulate.lice(p.lice[1,], dist=x1, day=T1+122, log=FALSE)
+dim(Lice_pred)
+dim(Lice_pred[[1]])
+T1
+x1
+T1
+Tstart.all[[j]][i]
+migDate
+p.lice[1,5]
+Tstart.all[[j]][i]+(c(32.7, 53, 65)+40)/p.lice[1,5]
+simulate.lice(p.lice[1,], dist=c(32.7, 53, 65), day=round(Tstart.all[[j]][i]+(c(32.7, 53, 65)+40)/p.lice[1,5]), log=FALSE)
+m<-simulate.lice(p.lice[1,], dist=c(32.7, 53, 65), day=round(Tstart.all[[j]][i]+(c(32.7, 53, 65)+40)/p.lice[1,5]), log=FALSE)
+m[[1]][,1]+m[[2]][,1]+m[[3]][,1]
+G<-read.csv("Simulations/Glendale.csv")#
+D1<-sample(G$day[G$year!=2010], size=1000, replace=TRUE, prob=G$fry[G$year!=2010]/sum(G$fry[G$year!=2010])) #
+D2<-sample(G$day[G$year==2010], size=1000, replace=TRUE, prob=G$fry[G$year==2010]/sum(G$fry[G$year==2010])) #
+#
+quartz(width=3.2, height=2.5, pointsize=10)#
+hist(D1, col="#0000FF80", border="white", main="", xaxt="n", las=1, xlab="Date of emergence")#
+axis(side=1, at=seq(70, 120, 10), labels= strftime(as.Date(seq(70, 120, 10), origin="2006-01-01"), format="%b-%d"))#
+hist(D2, col="#FF000080", border="white", add=TRUE)#
+#
+Tstart.all<-list(D1, D2)#
+#
+Metrics<-matrix(NA); length(Metrics)<-c(2*1000*4*4); dim(Metrics)<-c(2,1000, 4, 4)#
+# Metrics: (1) infection pressure, (2) max lice, (3) motile-days, (4) mean lice at 3 sites#
+#
+for(s in 1:4){ #for each scenario#
+	L<-farmL.all[[s]]#
+	L<-as.matrix(L)#
+	dimnames(L)[[2]]<-NULL#
+	L<-rbind(rep(0, length(T)), L) #add row of zeros for imputing#
+	for(i in 1:1000){#
+		# 1) Total infection pressure#
+		x1<-seq(-40, 60, dx) #All start at Glendale#
+		Xind<-match(x1, x)#
+		for(j in 1:2){ #Do two simulations: latter starting 3 weeks earlier#
+			T1<-migDate(x1, Xstart=-40, Tstart=Tstart.all[[j]][i], numeric=TRUE)#
+			Tind<-findInterval(round(T1, 1)+122, round(T, 1))#
+			Metrics[j,i,s,1]<-p.lice[1,'phi']*sum(farmL.all[[s]][cbind(Xind, Tind)])*dx	#
+			# 2) Maximum expected lice#
+			Lice_pred<-simulate.lice(p.lice[1,], dist=x1, day=T1+122, log=FALSE)#
+			Metrics[j,i,s,2]<-max(Lice_pred[[1]][,1]+Lice_pred[[2]][,1]+Lice_pred[[3]][,1])#
+			# 3) Number of motile-days#
+			Metrics[j,i,s,3]<-sum(Lice_pred[[3]][,1])*dt	#
+			# 4) Mean lice at Glacier, Burdwood, Wicklow#
+			m<-simulate.lice(p.lice[1,], dist=c(32.7, 53, 65), day=round(Tstart.all[[j]][i]+(c(32.7, 53, 65)+40)/p.lice[1,5]), log=FALSE)#
+			Metrics[j,i,s,4]<-mean(m[[1]][,1]+m[[2]][,1]+m[[3]][,1])#
+			rm(Lice_pred, T1)#
+			}#
+	}#
+}
+Metrics.summary<-list(#
+	InfPressure=list(rbind(apply(Metrics[1,,,1], 2, mean), apply(Metrics[2,,,1], 2, mean)), rbind(apply(Metrics[1,,,1], 2, quantile, c(0.025)), apply(Metrics[2,,,1], 2, quantile, c(0.025))), rbind(apply(Metrics[1,,,1], 2,  quantile, c(0.925)), apply(Metrics[2,,,1], 2,  quantile, c(0.925)))),#
+	MaxLice=list(rbind(apply(Metrics[1,,,2], 2, mean), apply(Metrics[2,,,2], 2, mean)), rbind(apply(Metrics[1,,,2], 2, quantile, c(0.025)), apply(Metrics[2,,,2], 2, quantile, c(0.025))), rbind(apply(Metrics[1,,,2], 2,  quantile, c(0.925)), apply(Metrics[2,,,2], 2,  quantile, c(0.925)))),#
+	MotDays=list(rbind(apply(Metrics[1,,,3], 2, mean), apply(Metrics[2,,,3], 2, mean)), rbind(apply(Metrics[1,,,3], 2, quantile, c(0.025)), apply(Metrics[2,,,3], 2, quantile, c(0.025))), rbind(apply(Metrics[1,,,3], 2,  quantile, c(0.925)), apply(Metrics[2,,,3], 2,  quantile, c(0.925)))),#
+	Monitoring=list(rbind(apply(Metrics[1,,,4], 2, mean), apply(Metrics[2,,,4], 2, mean)), rbind(apply(Metrics[1,,,4], 2, quantile, c(0.025)), apply(Metrics[2,,,4], 2, quantile, c(0.025))), rbind(apply(Metrics[1,,,4], 2,  quantile, c(0.925)), apply(Metrics[2,,,4], 2,  quantile, c(0.925))))#
+	)#
+#
+quartz(width=6.3, height=3, pointsize=14)#
+par(mfrow=c(1,3), mar=c(3,5,2,0), oma=c(1,0,3,1), mgp=c(2.5, 1, 0))#
+#
+for(i in 1:3){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(4,2))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days")[i], cex=par('cex'))#
+if(i==2) legend(-10, max(Metrics.summary[[i]][[3]])*1.4, fill=c(4,2), c("Normal migration timing", "Early migration (e.g., 2010)"), xpd=NA, ncol=2, bty="n")#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+save.image("20160919_simulations")
+Metrics.summary[[4]]
+1-exp(-c.[1]*L[[1]][1,1])
+c.<-c(0.190, 0.087, 0.299)#
+#
+1-exp(-c.[1]*L[[1]][1,1])
+L-Metrics.summary[[4]]
+Metrics.summary[[4]]
+1-exp(-c.[1]*Metrics.summary[[4]][[1]][1,1])
+1-exp(c.[1]*Metrics.summary[[4]])
+1-exp(c.[1]*Metrics.summary[[4]][[1]])
+mort<-list(1-exp(c.[1]*Metrics.summary[[4]][[1]], 1-exp(c.[1]*Metrics.summary[[4]][[2]], 1-exp(c.[1]*Metrics.summary[[4]][[3]])
+mort<-list(1-exp(c.[1]*Metrics.summary[[4]][[1]], 1-exp(c.[1]*Metrics.summary[[4]][[2]], 1-exp(c.[1]*Metrics.summary[[4]][[3]]))
+mort<-list(1-exp(c.[1]*Metrics.summary[[4]][[1]], 1-exp(c.[1]*Metrics.summary[[4]][[2]], 1-exp(c.[1]*Metrics.summary[[4]][[3]]))
+mort<-list(1-exp(c.[1]*Metrics.summary[[4]][[1]]), 1-exp(c.[1]*Metrics.summary[[4]][[2]]), 1-exp(c.[1]*Metrics.summary[[4]][[3]]))
+barplot2(mort[[1]], plot.ci=TRUE, ci.l=mort[[2]], ci.u=mort[[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(4,2))
+1-exp(c.[1]*Metrics.summary[[4]][[1]])
+c.[1]
+Metrics.summary[[4]][[1]]
+mort<-list(1-exp(-c.[1]*Metrics.summary[[4]][[1]]), 1-exp(-c.[1]*Metrics.summary[[4]][[2]]), 1-exp(-c.[1]*Metrics.summary[[4]][[3]]))
+barplot2(mort[[1]], plot.ci=TRUE, ci.l=mort[[2]], ci.u=mort[[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(4,2))
+abline(h=15.9, lty=2, lwd=1.5)
+abline(h=15.9, lty=2, lwd=1.5, xpd=NA)
+abline(h=0.159, lty=2, lwd=1.5)
+barplot2(mort[[1]][1,], plot.ci=TRUE, ci.l=mort[[2]][1,], ci.u=mort[[3]][1,], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(4,2))
+barplot2(mort[[1]][1,], plot.ci=TRUE, ci.l=mort[[2]][1,], ci.u=mort[[3]][1,], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=grey(0.8))
+mort<-list(1-exp(-c.[1]*Metrics.summary[[4]][[1]]), 1-exp(-c.[1]*Metrics.summary[[4]][[2]]), 1-exp(-c.[1]*Metrics.summary[[4]][[3]]))#
+barplot2(mort[[1]][1,], plot.ci=TRUE, ci.l=mort[[2]][1,], ci.u=mort[[3]][1,], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=grey(0.8))#
+abline(h=0.159, lty=2, lwd=1.5)
+mort<-list(1-exp(-c.[1]*Metrics.summary[[4]][[1]]), 1-exp(-c.[1]*Metrics.summary[[4]][[2]]), 1-exp(-c.[1]*Metrics.summary[[4]][[3]]))#
+barplot2(mort[[1]], plot.ci=TRUE, ci.l=mort[[2]], ci.u=mort[[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(4,2))#
+abline(h=0.159, lty=2, lwd=1.5)
+locator(2)
+quartz(width=6.3, height=4, pointsize=14)
+quartz(width=5.3, height=4, pointsize=14)
+c.<-c(0.190, 0.087, 0.299)#
+Metrics.summary[[4]]<-list(1-exp(-c.[1]*Metrics.summary[[4]][[1]]), 1-exp(-c.[1]*Metrics.summary[[4]][[2]]), 1-exp(-c.[1]*Metrics.summary[[4]][[3]]))
+quartz(width=5.3, height=4, pointsize=14)#
+par(mfrow=c(2,2), mar=c(3,5,2,0), oma=c(1,0,3,1), mgp=c(2.5, 1, 0))#
+#
+for(i in 1:4){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(4,2))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days")[i], cex=par('cex'))#
+if(i==2) legend(-10, max(Metrics.summary[[i]][[3]])*1.4, fill=c(4,2), c("Normal migration timing", "Early migration (e.g., 2010)"), xpd=NA, ncol=2, bty="n")#
+}
+bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))
+par(mfrow=c(2,2), mar=c(3,4,1,1), oma=c(1,1,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in 1:4){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days")[i], cex=par('cex'))#
+if(i==2) legend(-10, max(Metrics.summary[[i]][[3]])*1.4, fill=c(4,2), c("Normal migration timing", "Early migration (e.g., 2010)"), xpd=NA, ncol=2, bty="n")#
+}
+quartz(width=5.3, height=4, pointsize=12)#
+par(mfrow=c(2,2), mar=c(3,4,1,1), oma=c(1,1,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in 1:4){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days")[i], cex=par('cex'))#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+par(mfrow=c(2,2), mar=c(3,5,1,1), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in 1:4){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days")[i], cex=par('cex'))#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+par(mfrow=c(2,2), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in 1:4){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days")[i], cex=par('cex'))#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+par(mfrow=c(2,2), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in 1:4){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", "d) Estimated mortality")[i], cex=par('cex'))#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", "d) Estimated mortality")[i], cex=par('cex'), adj=0)
+par(mfrow=c(2,2), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in 1:4){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", "d) Estimated mortality")[i], cex=par('cex'), adj=0)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+quartz(width=6.3, height=3, pointsize=12)#
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in c(1,2,4)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", "d) Estimated mortality")[i], cex=par('cex'), adj=0)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+quartz(width=6.3, height=3, pointsize=14)#
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in c(1,2,4)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", "d) Estimated mortality")[i], cex=par('cex'), adj=0)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+quartz(width=6.3, height=2, pointsize=14)#
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in c(1,2,4)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", "d) Estimated mortality")[i], cex=par('cex'), adj=0)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in c(1,2,4)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", "d) Estimated mortality")[i], cex=par('cex'), adj=0)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+if(i==4) abline(h=0.159, lty=2)
+if(i==4) abline(h=0.159, lty=2, col=2)
+rm(list=ls())
+load('~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model/20160919_simulations.RData')
+Metrics.summary[[5]]<-list(1-exp(-c.[1]*Metrics.summary[[4]][[1]]), 1-exp(-c.[1]*Metrics.summary[[4]][[2]]), 1-exp(-c.[1]*Metrics.summary[[4]][[3]]))
+c.<-c(0.190, 0.087, 0.299)#
+Metrics.summary[[5]]<-list(1-exp(-c.[1]*Metrics.summary[[4]][[1]]), 1-exp(-c.[1]*Metrics.summary[[4]][[2]]), 1-exp(-c.[1]*Metrics.summary[[4]][[3]]))
+quartz(width=6.3, height=2, pointsize=14)#
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in c(1,4,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", "d) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==4) abline(h=0.159, lty=2, col=2)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==4) abline(h=0.159, lty=2, col=2)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+if(i==5) abline(h=0.159, lty=2, col=2)
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, lty=2, col=2)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))#
+#
+###################################################################################################################
+# Lice on fish at Alex's sites#
+###################################################################################################################
+# Use real scenario
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), xpd=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, lty=2, col=2)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), xpd=c(3.5,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, lty=2, col=2)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, lty=2, col=2)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+if(i==5) abline(h=0.159, lty=3, col=2)
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, lty=3, col=2)#
+}
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+quartz(width=6.3, height=2.5, pointsize=14)#
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+}#
+#
+mtext(side=1, outer=TRUE, "Treatment scenario", cex=par('cex'))
+if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'))
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'))#
+}
+mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}
+if(i==1) legend('topright', col=c(grey(0.8), grey(0.4)), c("Normal", "Early"))
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+#
+	if(i==1) legend('topright', col=c(grey(0.8), grey(0.4)), c("Normal", "Early"))#
+}
+if(i==1) legend('topright', fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"))
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+#
+	if(i==1) legend('topright', fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"))#
+}
+locator(1)
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+#
+	if(i==1) legend(-28, 0.16, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n")#
+}
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-28, 0.16, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA)
+legend(-32, 0.16, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA)
+legend(-31, 0.16, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA)
+legend(-31, 0.18, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA)
+legend(-31, 0.1, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA)
+legend(-31, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA)
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-31, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA)
+legend(-32, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA)
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-32, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA)
+legend(-32, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8)
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-32, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8)
+legend(-32, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8, title="Timing")
+legend(-31, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8, title="Timing")
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.8), grey(0.4)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-31, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8, title="Timing")
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, angle=c(NA, 45), density=c(NA, 30))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-31, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8, title="Timing")
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, angle=c(NA, 45), density=c(NA, 30), col=1)#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-31, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8, title="Timing")
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, angle=c(NA, 45), density=c(NA, 30), col=c("white", 1))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-31, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8, title="Timing")
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, angle=c(NA, 45), density=c(NA, 30), col=c("white", grey(0.8)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-31, 0.19, fill=c(grey(0.8), grey(0.4)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8, title="Timing")
+bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.9), grey(0.4)))
+par(mfrow=c(1,3), mar=c(3,5,1,0), oma=c(1,0,1,1), mgp=c(2.5, 1, 0), mgp=c(3,1,0))#
+#
+for(i in c(1,2,5)){#
+	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c("Infective larvae", "Number of lice", "Motile-days", "Number of lice", "Percent")[i], beside=TRUE, col=c(grey(0.9), grey(0.3)))#
+abline(h=0)#
+mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days", " d) Average louse load", "c) Estimated mortality")[i], cex=par('cex'), adj=0)#
+	if(i==5) abline(h=0.159, col=2)#
+	if(i==2)mtext(side=1, "Treatment scenario", cex=par('cex'), line=3)#
+}#
+legend(-31, 0.19, fill=c(grey(0.9), grey(0.3)), c("Normal", "Early"), bty="n", xpd=NA, cex=0.8, title="Timing")
