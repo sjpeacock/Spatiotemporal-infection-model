@@ -1,11 +1,14 @@
-### Spatiotemporal sea-louse transmission dynamics of farmed and wild salmon
+# Spatiotemporal sea-louse transmission dynamics of farmed and wild salmon
 ## Supporting R code and data
 September 20, 2016
 
 ##Authors
 Stephanie J. Peacock (stephanie.j.peacock@gmail.com)
+
 Martin Krkosek, University of Toronto
+
 Andrew W. Bateman, University of Victoria
+
 Mark A. Lewis, University of Alberta
 
 ##Contents
@@ -17,4 +20,4 @@ Mark A. Lewis, University of Alberta
 
 4. Simulations: code that uses the fitted model parameters to explore different treatment scenarios.
 
-# Disclaimer: the code is not perfectly commented...please email me if you somehow stumble upon this repository and are interested in applying our model.
+### Disclaimer: the code is not perfectly commented...please email me if you somehow stumble upon this repository and are interested in applying our model.
