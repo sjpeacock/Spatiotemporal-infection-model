@@ -1,91 +1,41 @@
-library(here)
-library(dclone)
-library(parallel)
-library(boot) # for inv.logit function
+rm(list=ls())
 
-# Load in results from model fitting by "fit-model-JAGS.R"
-load('Workspaces/LiceFits2Data_20160308.RData')
+library(dclone); library(gplots)
 
-# Summaryize MCMC output
+setwd("~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model")
+load('0 Original model/OriginalModel_DClone_20161114.RData')
+
 S<-summary(mod)
 
 #######################################################
-# Table 1: Parameter estimates from spatiotemporal model
+# Model predictions from the three chains
 #######################################################
-p.lice.log<-matrix(c(S[[1]][,1], S[[1]][,1]-1.96*S[[1]][,3], S[[1]][,1]+1.96*S[[1]][,3]), nrow=3, ncol=8, byrow=TRUE)
-p.lice<-cbind(plogis(p.lice.log[,1:4]), exp(p.lice.log[,5:8]))
-rownames(p.lice)<-c("mean", "2.5%", "97.5%")
-colnames(p.lice)<-c("Csc", "Csh", "Psc", "Psh", "V",   "k" ,  "phi", "r")
 
-# Other results
-# Farm over ambient infection pressure
-kappa.log <- rnorm(1000, S[[1]]['k.log',1], S[[1]]['k.log',2])
+source("0 Original model/sim_original2.R")
 
-phi.log <- rnorm(1000, S[[1]]['phi.log',1], S[[1]]['phi.log',2])
-
-farmOverAmb <- exp(phi.log)/(0.2*exp(kappa.log))
-hist(farmOverAmb, col=grey(0.8), border="white", main = expression(paste("Histogram of ", phi/kappa)))
-abline(v = exp(S[[1]]['phi.log',1])/(0.2*exp(S[[1]]['k.log',1])), col=2)
-
-exp(S[[1]]['phi.log',1])/(0.2*exp(S[[1]]['k.log',1]))
-quantile(farmOverAmb, c(0.025, 0.975))
-
-# Farm over ambient louse density
-fPressure <- exp(S[[1]]['phi.log',1]) * farmL[2:nrow(farmL), ] #first row is zeroes
-ratioL <- fPressure / exp(S[[1]]['k.log',1])
-range(ratioL)
-
-I <- which(ratioL == max(ratioL), arr.ind = TRUE)
-mean(x[I[, 1]])
-as.Date(T[I[, 2]], origin="2006-01-01")
+dat.sim<-list(y=dat$y, gamma=dat$gamma, u_n=dat$u_n, u_c=dat$u_c, n.reps=dat$n.reps)
+dat.sim$x=rep(c(-40:70), dat.sim$n.reps)
+dat.sim$n.sites=
 
 
+pred<-list(sim.model(apply(mod[[1]], 2, mean)), sim.model(apply(mod[[2]], 2, mean)), sim.model(apply(mod[[3]], 2, mean)))
 
-# How many km * days was the ratio above 1?
 
-source("filledContour.R")
-pal<-colorRampPalette(c("white", 1))
-cols<-c('#ca0020','#f4a582','#f7f7f7','#92c5de','#0571b0')
-
-pdf(file = "Figures/Supplement-kmdaysAbove1.pdf", width = 4.5, height = 4, pointsize=10)
-par(mfrow=c(1,1), mar=c(4,4,2,1), oma=c(0,0,0,0))
-filledContour(ratioL[seq(1, nrow(ratioL), 10), seq(1, ncol(ratioL), 10)], x=x[seq(1, nrow(ratioL), 10)], y=as.Date(T, origin="2006-01-01")[seq(1, ncol(ratioL), 10)], zlim=c(0,31), color.palette=pal, xlab="Distance along migration (km)", ylab="Date")
-mtext(side=3, line=1, "Ratio of farm/ambient larval density")
-abline(v=c(-3.7, 4.0, 53), lty=c(1:3), lwd=1.2)
-points(mean(x[I[, 1]]), as.Date(mean(T[I[, 2]]), origin="2006-01-01"), pch=8, cex=0.8)
-contour(z = ratioL[seq(1, nrow(ratioL), 10), seq(1, ncol(ratioL), 10)], x = x[seq(1, nrow(ratioL), 10)], y = as.Date(T, origin="2006-01-01")[seq(1, ncol(ratioL), 10)], levels = c(1, 10), col = cols[1], add = TRUE, lwd = c(2, 1))
-dev.off()
-
-G1 <- which(ratioL > 1, arr.ind = TRUE)
-nrow(G1) * dt * dx 
-
-G10 <- which(ratioL > 10, arr.ind = TRUE)
-nrow(G10) * dt * dx 
-
-G30 <- which(ratioL > 30, arr.ind = TRUE)
-nrow(G30) * dt * dx 
 
 # #######################################################
 # # Compare to priors
 # #######################################################
-prior<-data.frame(par.names, mu, sig)
+# prior<-data.frame(par.names, mu, sig)
 
-par(mfrow=c(2,4), mar=c(4,4,2,1))
-for(i in 1:8){
-	xR<-range(c(mod[[1]][,i], mod[[2]][,i], mod[[3]][,i], init.p[[1]][which(names(init.p[[1]])==colnames(mod[[1]])[i])], init.p[[2]][which(names(init.p[[2]])==colnames(mod[[1]])[i])], init.p[[3]][which(names(init.p[[3]])==colnames(mod[[1]])[i])]))
-	
-	hist(c(mod[[1]][,i], mod[[2]][,i], mod[[3]][,i]), border=NA, xlab="parameter value", ylab="density", freq=FALSE, main=colnames(mod[[1]])[i], xlim=xR)
-	
-	# "Posterior" desnities (note K = 10 so narrower variance that MLE)
-	for(j in 1:3) lines(density(mod[[j]][,i]), col=j, lwd=2)
-	
-	# Prior distribution (blue)
-	xP<-seq(xR[1], xR[2], length.out=100)
-	lines(xP, dnorm(xP, mean=prior$mu[which(prior$par.names==colnames(mod[[1]])[i])], sd=prior$sig[which(prior$par.names==colnames(mod[[1]])[i])]), col=4)
-	
-	# Initial values (vertical lines)
-	for(j in 1:3) abline(v=init.p[[j]][which(names(init.p[[j]])==colnames(mod[[1]])[i])], col=j, lty=2)
-	}
+# par(mfrow=c(2,4), mar=c(4,4,2,1))
+# for(i in 1:8){
+	# xR<-range(c(mod[[1]][,i], mod[[2]][,i], mod[[3]][,i], init.p[[1]][which(names(init.p[[1]])==colnames(mod[[1]])[i])], init.p[[2]][which(names(init.p[[2]])==colnames(mod[[1]])[i])], init.p[[3]][which(names(init.p[[3]])==colnames(mod[[1]])[i])]))
+	# hist(c(mod[[1]][,i], mod[[2]][,i], mod[[3]][,i]), border=NA, xlab="parameter value", ylab="density", freq=FALSE, main=colnames(mod[[1]])[i], xlim=xR)
+	# for(j in 1:3) lines(density(mod[[j]][,i]), col=j, lwd=2)
+	# xP<-seq(xR[1], xR[2], length.out=100)
+	# lines(xP, dnorm(xP, mean=prior$mu[which(prior$par.names==colnames(mod[[1]])[i])], sd=prior$sig[which(prior$par.names==colnames(mod[[1]])[i])]), col=4)
+	# for(j in 1:3) abline(v=init.p[[j]][which(names(init.p[[j]])==colnames(mod[[1]])[i])], col=j, lty=2)
+# }
 
 # initial values don't seem to have much to do with it. Maybe just run waaaay longer?
 
@@ -93,48 +43,105 @@ for(i in 1:8){
 # Data cloning results
 #######################################################
 DC<-dctable(mod)
+#k<-c(1:3,5:8)
 
-# For Feb 15 fits (in doc as of Jan 8)
-k<-1:length(DC[[1]]$n.clones) #Inlcude all clones.
-k<-c(1:4,6) # K = 7 did not converge. Exclude.
 
-# For Mar 8 fits (in doc as of Jan 8)
-k<-1:length(DC[[1]]$n.clones) #Inlcude all clones.
-k<-c(1:4,6) # K = 7 did not converge. Exclude.
-
-par.names<-c(expression(paste(S[c], "-chum")), expression(paste(S[h], "-chum")), expression(paste(S[c], "-pink")), expression(paste(S[h], "-pink")), "v", expression(kappa), expression(phi), "r")
-
-# quartz(width=6.3, height=3, pointsize=11)
-pdf(file = "Figures/Supplement_SpatiotempDC.pdf", width = 6.3, height = 3)
+quartz(width=6.3, height=3, pointsize=11)
 par(mfrow=c(2,4), mar=c(1,1,0,0), oma=c(4,4,1,1))
-for(i in 1:8){
+for(i in 1:15){
 	plot(DC[[i]]$n.clones[k], DC[[i]]$sd[k]^2/(DC[[i]]$sd[1]^2), "l", bty="l", las=1, ylab="", xlab="", xaxt="n", yaxt="n", ylim=c(0,1))
 	lines(1:10, 1/(1:10), lty=2)
 	points(DC[[i]]$n.clones[k], DC[[i]]$sd[k]^2/(DC[[i]]$sd[1]^2), pch=21, bg="white")
-	mtext(side=3, par.names[i], line=-2)
+	mtext(side=3, colnames(mod[[1]])[i], line=-2)
 	if(i>4) axis(side=1)else axis(side=1, labels=FALSE)
 	if(i==1|i==5) axis(side=2, las=1) else axis(side=2, labels=FALSE)
 }
 mtext(side=1, outer=TRUE, "Number of clones", line=2)
 mtext(side=2, outer=TRUE, "Scaled variance", line=2)
-dev.off()
 
-# Plot histograms of Sc and Sh - pink
-# quartz(width=3, height=4, pointsize=10)
+
+par(mfrow=c(2,3), mar=c(4,4,2,1))
+for(i in 6:7){
+	for(j in 8:10){
+		plot(as.numeric(c(mod[[1]][,i], mod[[2]][,i], mod[[3]][,i])), as.numeric(c(mod[[1]][,j], mod[[2]][,j], mod[[3]][,j])), xlab=colnames(mod[[1]])[i], ylab=colnames(mod[[1]])[j], bty="l", col="#00000030")}}
+
+
+######################################################################################
+#
+# For presentation: lambda_c (i=2,3), lh_R (4), Lm_R (5), sc and sh (12-15)
+######################################################################################
+######################################################################################
+
+par.names<-c(expression(italic(D)), expression(paste(lambda[c], "-pink")), expression(paste(lambda[c], "-chum")), expression(lambda[h]/lambda[c]), expression(lambda[m]/lambda[c]), expression(paste(italic(k), "-pink")), expression(paste(italic(k), "-chum")), expression(phi[1]), expression(phi[2]), expression(phi[3]), expression(italic(r)), expression(paste(italic(s[c]), "-pink")), expression(paste(italic(s[c]), "-chum")), expression(paste(italic(s[h]), "-pink")), expression(paste(italic(s[h]), "-chum")))
+
+
+quartz(width=5, height=4)
+
+par(mfrow=c(3,2), mar=c(2,2,2,1), oma=c(2,2,0,0))
+for(i in c(4:5,12:15)){
+	y<-(DC[[i]]$sd)^2/(DC[[i]]$sd[1])^2
+	plot(DC[[i]]$n.clones, y, "o", pch=21, bg="white", ylim=c(0, 1), las=1, bty="n", xlim=c(0,11), xlab="", yaxt="n", ylab="")
+	axis(side=2, at=c(0, 0.5, 1), las=1)
+	lines(DC[[i]]$n.clones, 1/DC[[i]]$n.clones, lty=3)
+	points(DC[[i]]$n.clones[which(DC[[i]]$r.hat>1.1)], y[which(DC[[i]]$r.hat>1.1)], pch=19, col=2, cex=0.75)
+	mtext(side=3, par.names[i])
+	}
+mtext(side=1, outer=TRUE, "Number of clones", cex=par('cex'), line=1)
+mtext(side=2, outer=TRUE, "Scaled variance", cex=par('cex'), line=1)
+
+
+quartz(width=3, height=3, pointsize=10)
+plot(as.numeric(c(mod[[1]][,5], mod[[2]][,5], mod[[3]][,5])), as.numeric(c(mod[[1]][,14], mod[[2]][,14], mod[[3]][,14])), bty="n", xlab=expression(paste("logit ", lambda[m]/lambda[c])), ylab=expression(paste("log ", s[h], "-pink")), col="#00000030", las=1)
+
+
+quartz(width=3, height=4, pointsize=10)
 par(mfrow=c(2,1), mar=c(4,2,2,1), oma=c(0,0,0,0))
-hist(inv.logit(c(mod[[1]][,3], mod[[2]][,3], mod[[3]][,3])), xlab=expression(paste(s[c], "-pink")), freq=FALSE, yaxt="n", col=2, border="white", main="")
+hist(inv.logit(c(mod[[1]][,12], mod[[2]][,12], mod[[3]][,12])), xlab=expression(paste(s[c], "-pink")), freq=FALSE, yaxt="n", col=2, border="white", main="")
 arrows(par('usr')[1], par('usr')[3], par('usr')[1], par('usr')[4], length=0.08, xpd=NA)
 mtext(side=2, "Density", line=1)
-hist(inv.logit(c(mod[[1]][,4], mod[[2]][,4], mod[[3]][,4])), xlab=expression(paste(s[h], "-pink")), freq=FALSE, , yaxt="n", col=2, border="white", main="")
+hist(inv.logit(c(mod[[1]][,14], mod[[2]][,14], mod[[3]][,14])), xlab=expression(paste(s[h], "-pink")), freq=FALSE, , yaxt="n", col=2, border="white", main="")
 arrows(par('usr')[1], par('usr')[3], par('usr')[1], par('usr')[4], length=0.08, xpd=NA)
 mtext(side=2, "Density", line=1)
+
+y<-exp(c(mod[[1]][,5], mod[[2]][,5], mod[[3]][,5]))
+hist(y, xlab=par.names[5], freq=FALSE, , yaxt="n", col=2, border="white", main="", ylab="")
+lines(dlnorm(seq(min(y), max(y), length.out=100), meanlog=mu[8], sig[8]), lty=3)
+arrows(par('usr')[1], par('usr')[3], par('usr')[1], par('usr')[4], length=0.08, xpd=NA)
+mtext(side=2, "Density", line=1)
+
+######################################################################################
+######################################################################################
+
+# Survival correlations
+par(mfrow=c(15, 15), mar=c(0,0,0,0), oma=c(0,2,2,0))
+for(i in 1:15){
+	for(j in 1:15){
+		plot(as.numeric(c(mod[[1]][seq(1,2000,10),i], mod[[2]][seq(1,2000,10),i], mod[[3]][seq(1,2000,10),i])), as.numeric(c(mod[[1]][seq(1,2000,10),j], mod[[2]][seq(1,2000,10),j], mod[[3]][seq(1,2000,10),j])), xlab="", ylab="", bty="o", col="#00000030", xaxt="n", yaxt="n")
+		if(i==1) mtext(side=3, colnames(mod[[1]])[j], cex=0.6)
+		if(j==1) mtext(side=2, colnames(mod[[1]])[i], cex=0.6)
+		
+		}}
+
+# Correlation betwen sh and Lm_R
+		
+		
+		
+######################################################################################
+# Parameters of interest
+######################################################################################
+
+est<-exp(rbind(HPDinterval(as.mcmc(c(mod[[1]][,6], mod[[2]][,6], mod[[2]][,6]))), HPDinterval(as.mcmc(c(mod[[1]][,7], mod[[2]][,7], mod[[2]][,7]))), 
+HPDinterval(as.mcmc(c(mod[[1]][,8], mod[[2]][,8], mod[[2]][,8]))),
+HPDinterval(as.mcmc(c(mod[[1]][,9], mod[[2]][,9], mod[[2]][,9]))),
+HPDinterval(as.mcmc(c(mod[[1]][,10], mod[[2]][,10], mod[[2]][,10])))))
+rownames(est)<-c("kp", "kc", "phi1", "phi2", "phi3")
+
+
 
 ####################################################################################################
 ## Look at MCMC output
 ####################################################################################################
 thin<-1
-
-pdf(file ="Figures/Supplement-MCMCtrace.pdf", width = 6, height = 5.5, pointsize = 10)
 layout(matrix(c(1,1,2,3,3,4,5,5,6,7,7,8,9,9,10,11,11,12,13,13,14), nrow=7, ncol=3, byrow=TRUE))
 par(mar=c(2,1,0,1), oma=c(2,4,3,0), mgp=c(3.5, 1, 0))
 for(i in 1:7){
@@ -150,13 +157,13 @@ for(i in 1:7){
 	if(i==7) mtext(side=1, "Parameter value", line=2.5, cex=0.8)
 	if(i==1) mtext(side=3, line=1, "Density", cex=0.8)
 	}
+}
 
-dev.off()
 #######################################################
 # Plot model results
 #######################################################
-source('3 Fitting/liceBoot.R')
-source("3 Fitting/sim-model.R")
+source('Fitting/liceBoot.R')
+source("Fitting/sim-model.R")
 d<-4 # Scale of grid for plotting
 n.dist<-length(seq(-44,68,d))
 n.day<-length(seq(100,144,d))
@@ -166,12 +173,10 @@ L<-farmL
 
 sim.out<-simulate.lice(p=S[[1]][,1], dist=dist2, day=day2)
 
-j<-1 #species = pink
-
-# pdf(file = "Figures/Supplement-PinkFits2Data.pdf", width=4, height=9)
-quartz(width = 4, height = 9, pointsize=10)
+j<-1 #species
+i<-1 #stage 
+quartz(width=4, height=9)
 par(mfrow=c(3,1), mar=c(1,0,1,0), oma=c(0,0,1,0))
-
 for(i in 1:3){
 	Z<-matrix(sim.out[[i]][,j], nrow=n.dist, ncol=n.day, byrow=FALSE)
 	pmat1<-persp(z=Z, x=seq(-44,68,d), y=seq(100,144,d), xlab="Distance", ylab="Time", zlab=c("C(x,t)", "H(x,t)", "M(x,t)")[i], theta=-150, phi=25, col="#FFFFFF30", zlim=c(0, max(Lice.boot[i,,j,1])))#, main=c("Pink", "Chum")[j]
@@ -215,7 +220,14 @@ for(i in 1:3){
 	
 } #end stage i
 
-dev.off()
+#par(new=TRUE)
+#persp(z=matrix(sim.out[[i]][,j], nrow=n.dist, ncol=n.day, byrow=FALSE), x=seq(-44,68,d), y=seq(100,144,d), xlab="", ylab="", zlab="", theta=-150, phi=25, col="#FFFFFF80", border=NA, bty="n")
+
+# source('~/Desktop/filledContour.R')
+# greys<-colorRampPalette(c("white", 1))
+# filledContour(z=matrix(sim.out[[stage]][,species], nrow=n.dist, ncol=n.day, byrow=FALSE), x=seq(-44,68,d), y=seq(100,144,d), xlab="Distance", ylab="Time", zlab=c("C(x,t)", "H(x,t)", "M(x,t)")[stage], main=c("Pink", "Chum")[species], color.palette=greys, nlevels=20)
+# contour(z=matrix(sim.out[[stage]][,species], nrow=n.dist, ncol=n.day, byrow=FALSE), x=seq(-44,68,d), y=seq(100,144,d), add=TRUE)
+
 #######################################################
 # Animate model results
 #######################################################

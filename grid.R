@@ -12,7 +12,7 @@ x = c((-60/dx):(80/dx-dx))*dx	# spatial grid
 dt = 0.05							# resolution of temporal grid
 Tmax = 150
 n = round(Tmax/dt)					#number of grid spaces since SLICE treatment
-T = c((10/dt):n)*dt
+T = c(1:(Tmax/dt))*dt
 
 x0=which(x==0);
 t0=(-10/dt)

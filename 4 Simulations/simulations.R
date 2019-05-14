@@ -1,5 +1,4 @@
-rm(list=ls())
-setwd("~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model")
+
 library(gplots)
 #################################################################################################
 ## Set up parameters for treatment scenarios
@@ -9,9 +8,9 @@ source('params.R')
 p<-p.lice[1,]
 
 
-source("Simulations/sim-grid.R")
-source("Simulations/sim-functions.R")
-source("Fitting/sim-model.R")
+source("4 Simulations/sim-grid.R")
+source("4 Simulations/sim-functions.R")
+source("3 Fitting/sim-model.R")
 
 # time zero is September 1, 2005 for our purposes
 r1<-c(p.farm[[1]][1,1], p.farm[[2]][1,1], p.farm[[3]][1,1])
@@ -72,7 +71,7 @@ mtext(side=2, outer=TRUE, expression(paste("Average number of motile ", italic(L
 #################################################################################################
 ## Create cope distributions for all scenarios
 #################################################################################################
-source('~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model/Simulations/sim-larvae.R')
+source("4 Simulations/sim-larvae.R")
 
 migDate<-function(x, Xstart=-20, Tstart=195, v=p.lice[1,5], numeric=FALSE){
 	y<-Tstart+(x-Xstart)/v
@@ -84,9 +83,10 @@ e1<-98
 e2<-87
 
 # copedistributions saved as list of length 4 (4 scenarios) called farmL.all
-source('~/Desktop/filledContour.R')
+source('filledContour.R')
 pal<-colorRampPalette(c("white", 1, 1))
-quartz(width=6.3, height=6, pointsize=12)
+
+# quartz(width=6.3, height=6, pointsize=12)
 layout(matrix(c(1,3,1,3,1,3,2,4,2,4,2,4,5,5), 2, 7))
 par(mar=c(3,3,2,1), oma=c(2,2,1,0))
 for(i in 1:4){
@@ -100,7 +100,7 @@ for(i in 1:4){
 	
 	
 	if(i>=3) abline(h=as.Date(tT[[i]][1], origin="2005-09-01"), lty=2)
-	abline(v=c(0,3.5,53), lty=c(1:3), lwd=1.2)	
+	abline(v=c(-3.7, 4.0, 53), lty=c(1:3), lwd=1.2)	
 	
 	}
 mtext(side=1, outer=TRUE, "Distance along migration (km)")
@@ -112,11 +112,11 @@ mtext(side=4, "Larval density", line=3.5)
 #################################################################################################
 ## Calculate metrics
 #################################################################################################
-source('Fitting/sim-model.R')
+source('3 Fitting/sim-model.R')
 
 set.seed(98375)
 
-G<-read.csv("Simulations/Glendale.csv")
+G<-read.csv("4 Simulations/Glendale.csv")
 D1<-sample(G$day[G$year!=2010], size=1000, replace=TRUE, prob=G$fry[G$year!=2010]/sum(G$fry[G$year!=2010])) 
 D2<-sample(G$day[G$year==2010], size=1000, replace=TRUE, prob=G$fry[G$year==2010]/sum(G$fry[G$year==2010])) 
 
@@ -144,19 +144,19 @@ for(s in 1:4){ #for each scenario
 		Xind<-match(x1, x)
 		
 		for(j in 1:2){ #Do two simulations: latter starting 3 weeks earlier
-			# T1<-migDate(x1, Xstart=-40, Tstart=Tstart.all[[j]][i], numeric=TRUE)
-			# Tind<-findInterval(round(T1, 1)+122, round(T, 1))
-			
-			# Metrics[j,i,s,1]<-p.lice[1,'phi']*sum(farmL.all[[s]][cbind(Xind, Tind)])*dx	
-		
-			# # 2) Maximum expected lice
-			# Lice_pred<-simulate.lice(p.lice[1,], dist=x1, day=T1+122, log=FALSE)
-			
-			# Metrics[j,i,s,2]<-max(Lice_pred[[1]][,1]+Lice_pred[[2]][,1]+Lice_pred[[3]][,1])
-			
-			# # 3) Number of motile-days
-			# Metrics[j,i,s,3]<-sum(Lice_pred[[3]][,1])*dt	
-			
+			T1<-migDate(x1, Xstart=-40, Tstart=Tstart.all[[j]][i], numeric=TRUE)
+			Tind<-findInterval(round(T1, 1)+122, round(T, 1))
+
+			Metrics[j,i,s,1]<-p.lice[1,'phi']*sum(farmL.all[[s]][cbind(Xind, Tind)])*dx
+
+			# 2) Maximum expected lice
+			Lice_pred<-simulate.lice(p.lice[1,], dist=x1, day=T1+122, log=FALSE)
+
+			Metrics[j,i,s,2]<-max(Lice_pred[[1]][,1]+Lice_pred[[2]][,1]+Lice_pred[[3]][,1])
+
+			# 3) Number of motile-days
+			Metrics[j,i,s,3]<-sum(Lice_pred[[3]][,1])*dt
+
 			# 4) Mean lice at Glacier, Burdwood, Wicklow
 			m<-simulate.lice(p.lice[1,], dist=c(32.7, 53, 65), day=round(Tstart.all[[j]][i]+(c(32.7, 53, 65)+40)/p.lice[1,5])+122, log=FALSE)
 			Metrics[j,i,s,4]<-mean(m[[1]][,1]+m[[2]][,1]+m[[3]][,1])
@@ -181,7 +181,7 @@ Metrics.summary<-list(
 quartz(width=6.3, height=3, pointsize=14)
 par(mfrow=c(1,3), mar=c(3,5,2,0), oma=c(1,0,3,1), mgp=c(2.5, 1, 0))
 
-for(i in 1:2){
+for(i in 1:3){
 	bp<-barplot2(Metrics.summary[[i]][[1]], plot.ci=TRUE, ci.l=Metrics.summary[[i]][[2]], ci.u=Metrics.summary[[i]][[3]], las=1, names.arg=LETTERS[1:4], xlab="", ylab=c(expression(integral(L(x,t))), "max [C(x,t)+H(x,t)+M(x,t)]", expression(integral(M(x,t))))[i], beside=TRUE, col=c(4,2))
 abline(h=0)
 mtext(side=3, line=0.5, c("a) Total infection pressure", "b) Maximum louse load",  "c) Number of motile-days")[i], cex=par('cex'))

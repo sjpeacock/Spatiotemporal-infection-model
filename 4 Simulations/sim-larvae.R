@@ -1,8 +1,8 @@
 ### generate the distributions of copepods from the salmon farms in 2006
 #-------------------------------------------------------------------------------------------------
 setwd("~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model")
-source("Simulations/sim-functions.R")
-source("Simulations/sim-grid.R")
+source("4 Simulations/sim-functions.R")
+source("4 Simulations/sim-grid.R")
 library(snowfall)
 library(lattice)
 
@@ -26,7 +26,7 @@ for(s in 1:4){# for each scenario
 	
 	# !This takes ~ 10 minutes !
 	t.start<-proc.time()
-	source("Simulations/sim-larvae_1farm.R")
+	source("4 Simulations/sim-larvae_1farm.R")
 	cat("Process time for whole SP copepodid distribution (minutes) = ", (proc.time()-t.start)[3]/60)
 	
 	SP = est;
@@ -44,7 +44,7 @@ for(s in 1:4){# for each scenario
 	
 	# !This takes ~ 10 minutes !
 	t.start<-proc.time()
-	source("Simulations/sim-larvae_1farm.R")
+	source("4 Simulations/sim-larvae_1farm.R")
 	cat("Process time for whole HR copepodid distribution (minutes) = ", (proc.time()-t.start)[3]/60)
 	
 	HR = est;
@@ -62,7 +62,7 @@ for(s in 1:4){# for each scenario
 	
 	# !This takes ~ 10 minutes !
 	t.start<-proc.time()
-	source("Simulations/sim-larvae_1farm.R")
+	source("4 Simulations/sim-larvae_1farm.R")
 	cat("Process time for whole BW copepodid distribution (minutes) = ", (proc.time()-t.start)[3]/60)
 	
 	BW = est;

@@ -1,6 +1,4 @@
-setwd("~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model")
-
-load("Farm model/farm_fits_20160209.RData")
+load("Workspaces/farm_fits_20160209.RData")
 
 library(gplots)
 library(dclone)

@@ -20,4 +20,4 @@ Mark A. Lewis, University of Alberta
 
 4. Simulations: code that uses the fitted model parameters to explore different treatment scenarios.
 
-### Disclaimer: the code is not perfectly commented...please email me if you somehow stumble upon this repository and are interested in applying our model.
+### Please contact me if you're interested in using this code as it may be difficult to interpret.

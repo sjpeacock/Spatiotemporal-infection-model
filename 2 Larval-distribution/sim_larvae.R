@@ -1,12 +1,12 @@
 ### generate the distributions of copepods from the salmon farms in 2006
 #-------------------------------------------------------------------------------------------------
-setwd("~/Google Drive/Greens/FINALLY/GitHub/Spatiotemporal-infection-model")
-source("Larval-distribution/functions.R")
-source("grid.R")
 library(snowfall)
 library(lattice)
 
-source("params.R"); rm(p.lice)
+source("2 Larval-distribution/functions.R")
+source("grid.R")
+source("params.R")
+rm(p.lice)
 #------------------------------------------------------------------------------------------------
 #Number of cores to use in the cope caluculation
 cpus<-4
@@ -31,7 +31,7 @@ f0 = p.farm[[1]][3,1]	# source strength at time 0
 
 # !This takes ~ 10 minutes !
 t.start<-proc.time()
-source("Larval-distribution/sim_larvae_1farm.R")
+source("2 Larval-distribution/sim_larvae_1farm.R")
 cat("Process time for whole SP copepodid distribution (minutes) = ", (proc.time()-t.start)[3]/60)
 
 SP = est;
@@ -52,7 +52,7 @@ f0 = p.farm[[2]][3,1]; #source strenght at time 0
 
 # !This takes ~ 10 minutes !
 t.start<-proc.time()
-source("Larval-distribution/sim_larvae_1farm.R")
+source("2 Larval-distribution/sim_larvae_1farm.R")
 cat("Process time for whole HR copepodid distribution (minutes) = ", (proc.time()-t.start)[3]/60)
 
 HR = est;
@@ -71,7 +71,7 @@ f0 = p.farm[[3]][3,1]; #source strenght at time 0
 
 # !This takes ~ 10 minutes !
 t.start<-proc.time()
-source("Larval-distribution/sim_larvae_1farm.R")
+source("2 Larval-distribution/sim_larvae_1farm.R")
 cat("Process time for whole BW copepodid distribution (minutes) = ", (proc.time()-t.start)[3]/60)
 
 BW = est;
@@ -83,7 +83,7 @@ BWmaxarea = sum(est[,zeroindex])*dx;
 scale.par<-max(c(SPmaxarea, HRmaxarea, BWmaxarea))
 
 copedist<-SP/scale.par+HR/scale.par+BW/scale.par
-write.csv(copedist, "Larval-distribution/allFarms06_20160209.csv", row.names=FALSE);
+write.csv(copedist, paste("2 Larval-distribution/allFarms06_", Sys.Date(), "=.csv", sep=""), row.names=FALSE);
 
 
 #write.csv(SP/scale.par, "Output/SP06.csv", row.names=FALSE, col.names=FALSE);
